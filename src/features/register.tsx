@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Input } from '../components/input';
 import { Button, Link } from '@nextui-org/react';
+import { useRegisterMutation } from '../app/services/userApi';
+import { hasErrorField } from '../utils/has-error-field';
+import { ErrorMessage } from '../components/error-message';
 Link
 
 
@@ -33,17 +36,30 @@ export const Register: React.FC<Props> = ({
     }
   });
 
+  const [register, {isLoading}] = useRegisterMutation();
+  const [error, setError] = useState('');
+
   const onSubmit = async (data: Register) => {
     try {
-      
+      await register(data).unwrap;
+      setSelected('login')
     } catch (error) {
-
+      if(hasErrorField(error)) {
+        setError(error.data.error)
+      }
     }
   }
 
   return (
     <div>
       <form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
+        <Input 
+          control={control}
+          name='name'
+          label='Имя'
+          type='text'
+          required='Обязательное поле'
+        />
         <Input 
           control={control}
           name='email'
@@ -60,14 +76,16 @@ export const Register: React.FC<Props> = ({
         />
 
         <p className="text-center text-small">
-          Нет аккаунта?{" "}
+          Уже есть аккаунт?{" "}
           <Link
           size='sm'
           className='cursor-pointer'
-          onPress={() => setSelected('sign-up')}
+          onPress={() => setSelected('login')}
           >
-            Зарегистрируйтесь
+            Войдите
           </Link>
+
+        <ErrorMessage error={error} />
         </p> 
         <div className='flex gap-2 justify-end'>
           <Button fullWidth color='primary' type='submit' isLoading={isLoading}>
