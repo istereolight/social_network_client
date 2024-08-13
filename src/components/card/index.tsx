@@ -57,7 +57,19 @@ export const Card: React.FC<Props> = ({
   const currentUser = useSelector(selectCurrent);
 
   const refetchPosts = async () => {
-
+    switch (cardFor) {
+      case 'post':
+        await triggerAllPosts().unwrap();
+        break
+      case 'current-post':
+        await triggerAllPosts().unwrap();
+        break
+      case 'comment':
+        await triggerGetPostById(id).unwrap();
+        break
+      default: 
+        throw new Error('Неверный аргумент cardFor')
+    }
   }
 
   const handleDelete = async () => {
