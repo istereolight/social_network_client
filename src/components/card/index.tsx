@@ -15,6 +15,7 @@ import { FcDislike } from 'react-icons/fc';
 import { MdOutlineFavoriteBorder } from 'react-icons/md';
 import { FaRegComment } from 'react-icons/fa';
 import { ErrorMessage } from '../error-message';
+import { useDeleteCommentMutation } from '../../app/services/commentsApi';
 
 type Props = {
   avatarUrl: string;
@@ -49,7 +50,7 @@ export const Card: React.FC<Props> = ({
   const [triggerAllPosts] = useLazyGetAllPostsQuery();
   const [triggerGetPostById] = useLazyGetPostByIdQuery();
   const [deletePost, deletePostStatus] = useDeletePostMutation();
-  const [deleteComment, deleteCommentStatus] = useDeletePostMutation();
+  const [deleteComment, deleteCommentStatus] = useDeleteCommentMutation();
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrent);
