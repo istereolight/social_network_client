@@ -16,6 +16,7 @@ import { MdOutlineFavoriteBorder } from 'react-icons/md';
 import { FaRegComment } from 'react-icons/fa';
 import { ErrorMessage } from '../error-message';
 import { useDeleteCommentMutation } from '../../app/services/commentsApi';
+import { hasErrorField } from '../../utils/has-error-field';
 
 type Props = {
   avatarUrl: string;
@@ -55,6 +56,37 @@ export const Card: React.FC<Props> = ({
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrent);
 
+  const refetchPosts = async () => {
+
+  }
+
+  const handleDelete = async () => {
+    try {
+      switch (cardFor) {
+        case 'post':
+          await deletePost(id).unwrap();
+          await refetchPosts();
+          break
+        case 'current-post':
+          await deletePost(id).unwrap();
+          navigate('/');
+          break;
+        case 'comment':
+          await deleteComment(id).unwrap();
+          await refetchPosts();
+          break;
+        default:
+          throw new Error ('Неверный аргумент cardFor')
+      }
+    } catch (error) {
+      if (hasErrorField(error)) {
+        setError(error.data.error)
+      } else {
+        setError(error as string)
+      }
+    }
+  }
+
   return (
     <NextUiCard>
       <CardHeader className='justify-between items-center bg-transparent'>
@@ -68,7 +100,7 @@ export const Card: React.FC<Props> = ({
         </Link>
         {
           authorId === currentUser?.id && (
-            <div className='cursor-pointer'>
+            <div className='cursor-pointer' onClick={handleDelete}>
               {
                 deletePostStatus.isLoading || deleteCommentStatus.isLoading ? (
                   <Spinner /> ) : (
