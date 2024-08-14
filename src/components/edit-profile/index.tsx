@@ -3,7 +3,11 @@ import { User } from '../../app/types';
 import { ThemeContext } from '../theme-provider';
 import { useUpdateUserMutation } from '../../app/services/userApi';
 import { useParams } from 'react-router-dom';
-import { Modal, ModalContent, ModalHeader } from '@nextui-org/react';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from '@nextui-org/react';
+import { Input } from '../input';
+import { MdOutlineEmail } from 'react-icons/md';
+import { Controller, useForm } from 'react-hook-form';
+import { ErrorMessage } from '../error-message';
 
 type Props = {
   isOpen: boolean;
@@ -42,9 +46,73 @@ export const EditProfile: React.FC<Props> = ({
       <ModalContent>
         {
           (onClose) => (
-            <ModalHeader className='flex flex-col gap-1'>
-              Изменение профиля
-            </ModalHeader>
+            <>
+              <ModalHeader className='flex flex-col gap-1'>
+                Изменение профиля
+              </ModalHeader>
+              <ModalBody>
+                <form className='flex flex-col gap-4'>
+                  <Input 
+                    control={control}
+                    name='email'
+                    label='Email'
+                    type='email'
+                    endContent={<MdOutlineEmail />}
+                  />
+                  <Input 
+                    control={control}
+                    name='name'
+                    label='Имя'
+                    type='text'
+                  />
+                  <input 
+                    type='file' 
+                    name='avatarUrl' 
+                    placeholder='Выберите файл'
+                  />
+                  <Input 
+                    control={control}
+                    name='dateOfBirth'
+                    label='Дата рождения'
+                    type='date'
+                    placeholder='Дата рождения'
+                  />
+                  <Controller 
+                    name='bio'
+                    control={control}
+                    render={({ field })=> (
+                      <Textarea 
+                        {...field}
+                        rows={4}
+                        placeholder='Ваша биография'
+                      />
+                    )}
+                  />
+                  <Input 
+                    control={control}
+                    name='location'
+                    label='Местоположение'
+                    type='text'
+                  />
+                  <ErrorMessage error={error} />
+                  <div className="flex gap-2 justify-end">
+                    <Button
+                      fullWidth
+                      color='primary'
+                      type='submit'
+                      isLoading={isLoading}
+                    >
+                      Обновите профиль
+                    </Button>
+                  </div>
+                </form>
+              </ModalBody>
+              <ModalFooter>
+                <Button color='danger' variant='light' onPress={onClose} >
+                  Закрыть
+                </Button>
+              </ModalFooter>
+            </>
           )
         }
       </ModalContent>

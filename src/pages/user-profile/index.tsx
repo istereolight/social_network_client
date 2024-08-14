@@ -12,6 +12,7 @@ import { CiEdit } from 'react-icons/ci';
 import { ProfileInfo } from '../../components/profile-info';
 import { formatToClientDate } from '../../utils/format-to-client-date';
 import { CountInfo } from '../../components/count-info';
+import { EditProfile } from '../../components/edit-profile';
 
 export const UserProfile = () => {
   const { id } = useParams<{ id: string}>();
@@ -83,6 +84,7 @@ export const UserProfile = () => {
                 ) : (
                   <Button
                     endContent={<CiEdit />}
+                    onClick={()=> onOpen()}
                   >
                     Редактировать
                   </Button>
@@ -102,6 +104,7 @@ export const UserProfile = () => {
           </div>
         </Card>
       </div>
+      <EditProfile isOpen={isOpen} onClose={onClose} user={data}/>
     </>
   )
 }
