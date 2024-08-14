@@ -11,6 +11,7 @@ import { MdOutlinePersonAddAlt1, MdOutlinePersonAddDisabled } from 'react-icons/
 import { CiEdit } from 'react-icons/ci';
 import { ProfileInfo } from '../../components/profile-info';
 import { formatToClientDate } from '../../utils/format-to-client-date';
+import { CountInfo } from '../../components/count-info';
 
 export const UserProfile = () => {
   const { id } = useParams<{ id: string}>();
@@ -27,6 +28,22 @@ export const UserProfile = () => {
   useEffect(() => () => {
     dispatch(resetUser())
   }, [])
+
+  const handleFollow = async () => {
+    try {
+      if (id) {
+        data?.isFollowing ?
+          await unfollowUser(id).unwrap()
+          : await followUser({ followingId: id }).unwrap()
+
+        await triggerGetUserByIdQuery(id);
+
+        await triggerCurrentQuery();
+      }
+    } catch (error) {
+      
+    }
+  }
 
   if (!data) {
     return null
@@ -52,6 +69,7 @@ export const UserProfile = () => {
                     color={data.isFollowing ? 'default' : 'primary'}
                     variant='flat'
                     className='gap-2'
+                    onClick={handleFollow}
                     endContent={
                       data.isFollowing ? (
                         <MdOutlinePersonAddDisabled />
@@ -79,7 +97,8 @@ export const UserProfile = () => {
           <ProfileInfo title='Обо мне' info={data.bio}/>
 
           <div className="flex gap-2">
-            
+            <CountInfo count={data.followers.length} title='Подписчики'/>
+            <CountInfo count={data.following.length} title='Подписки'/>
           </div>
         </Card>
       </div>
