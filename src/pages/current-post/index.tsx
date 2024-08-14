@@ -4,6 +4,7 @@ import { useGetPostByIdQuery, useLazyGetPostByIdQuery } from '../../app/services
 import { Card } from '../../components/card';
 import { GoBack } from '../../components/go-back';
 import { comment } from 'postcss';
+import { CreateComment } from '../../components/create-comment';
 
 export const CurrentPost = () => {
 
@@ -11,7 +12,7 @@ export const CurrentPost = () => {
   const { data } = useGetPostByIdQuery(params?.id ?? '')
 
   if (!data) {
-    return <h2>Поста не существует</h2>
+    return <h2>Такого поста не существует</h2>
   }
 
   const {
@@ -40,6 +41,9 @@ export const CurrentPost = () => {
         likedByUser={likedByUser}
         createdAt={createdAt}
       />
+      <div className="mt-10">
+        <CreateComment />
+      </div>
       <div className="mt-10">
         { data.comments ?
           data.comments.map((comment) => (
