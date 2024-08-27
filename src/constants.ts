@@ -1,1 +1,1 @@
-export const BASE_URL = process.env.NODE_ENV === 'production' ? 'none' : 'http://172.29.92.55:3000'
+export const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.29.92.56:3000' : 'http://172.29.92.56:3000'
