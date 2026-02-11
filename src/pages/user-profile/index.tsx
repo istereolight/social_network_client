@@ -120,8 +120,8 @@ export const UserProfile = () => {
           <ProfileInfo title="Обо мне" info={data.bio} />
 
           <div className="flex gap-2">
-            <CountInfo count={data.followers.length} title="Подписчики" />
-            <CountInfo count={data.following.length} title="Подписки" />
+            <CountInfo count={data.followers.length} title="Подписчиков" />
+            <CountInfo count={data.following.length} title="Подписок" />
           </div>
         </Card>
       </div>
