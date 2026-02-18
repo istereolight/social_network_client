@@ -21,13 +21,13 @@ import { MdOutlineEmail } from "react-icons/md"
 type Props = {
   isOpen: boolean
   onClose: () => void
-  user?: User;
+  user?: User
 }
 
 export const EditProfile: React.FC<Props> = ({
   isOpen = false,
   onClose = () => null,
-  user
+  user,
 }) => {
   const { theme } = useContext(ThemeContext)
   const [updateUser, { isLoading }] = useUpdateUserMutation()
@@ -58,7 +58,9 @@ export const EditProfile: React.FC<Props> = ({
       try {
         const formData = new FormData()
         data.name && formData.append("name", data.name)
-        data.email && data.email !== user?.email && formData.append("email", data.email)
+        data.email &&
+          data.email !== user?.email &&
+          formData.append("email", data.email)
         data.dateOfBirth &&
           formData.append(
             "dateOfBirth",
